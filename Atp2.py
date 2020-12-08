@@ -13,52 +13,68 @@ class Categoria:
 
 
 class Produto:
-    # __id: int
-    # __nome: str
-    # __descricao: str
-    # __preco: float
-    # __quantidade: int
-    # __categoria: Categoria
 
-    def __init__(self, nome, descricao, preco, quantidade, categoria):
+    nome: str
+    descricao: str
+    peso: float
+    altura: float
+    preco: float
+    quantidade: int
+    categoria: list
+
+    # def __init__(self, nome, descricao, peso, altura, preco, quantidade, categoria):
+    #     self.nome = nome
+    #     self.descricao = descricao
+    #     self.peso = peso
+    #     self.altura = altura
+    #     self.preco = preco
+    #     self.quantidade = quantidade
+    #     self.categoria = categoria
+
+    def __repr__(self):
+        return str(self.__dict__)
+
+    def get_nome(self):
+        return self.nome
+
+    def set_nome(self, nome):
         self.nome = nome
+    
+    def get_descricao(self):
+        return self.descricao
+
+    def set_descricao(self, descricao):
         self.descricao = descricao
+    
+    def get_peso(self):
+        return self.peso
+    
+    def set_peso(self, peso):
+        self.peso = peso
+
+    def get_altura(self):
+        return self.altura
+
+    def set_altura(self, altura):
+        self.altura = altura
+
+    def get_preco(self):
+        return self.preco
+
+    def set_preco(self, preco):
         self.preco = preco
+
+    def get_quantidade(self):
+        return self.quantidade
+
+    def set_quantidade(self, quantidade):
         self.quantidade = quantidade
+
+    def get_categoria(self):
+        return self.categoria
+
+    def set_categoria(self, categoria):
         self.categoria = categoria
-
-    # def __repr__(self):
-    #     return str(self.__dict__)
-
-    # def get_nome(self):
-    #     return self.__nome
-
-    # def set_nome(self, nome):
-    #     self.__nome = nome
-
-    # def get_descricao(self):
-    #     return self.__descricao
-
-    # def set_descricao(self, descricao):
-    #     self.__descricao = descricao
-
-    # def get_preco(self):
-    #     return self.__preco
-
-    # def set_preco(self, preco):
-    #     self.__preco = preco
-
-    # def get_quantidade(self):
-    #     return self.__quantidade
-
-    # def set_quantidade(self, quantidade):
-    #     self.__quantidade = quantidade
-
-    # def get_categoria(self):
-    #     return self.__categoria
-
-    # def set_categoria(self, categoria):
-    #     self.__categoria = categoria
 
 
 if __name__ == "__main__":
@@ -66,6 +82,7 @@ if __name__ == "__main__":
     menu: int = 1
 
     cat = Categoria()
+    prod = Produto()
     categorias = []
     produtos = []
 
@@ -128,30 +145,54 @@ if __name__ == "__main__":
                     input("Informe o numero de qual das opcoes deseja: "))
 
                 if(input_usuario == 1):
-                    count = 0
-                    for cat in categorias:
-                        print("ID: " + str(count) + "Nome: " + cat)
-                        count += 1
+                    exit = 's'
+                    categoria_insert = []
+                    while(exit != "n"):
+                        count = 0
+                        for cat in categorias:
+                            print("ID: " + str(count) + " Nome: " + cat)
+                            count += 1
 
-                    categoria_selecionada = int(
-                        input("Favor informar o id da categoria: "))
+                        categoria_selecionada = int(input("Favor informar o id da categoria: "))
+                        categoria_insert.append(categorias[categoria_selecionada])
+                        
+                        exit = input("Deseja adicionar mais uma categoria? S/N: ")
 
-                    produtos.append(Produto(input("Favor inserir o nome do produto: "),
-                                            input(
-                                                "Insira uma descricao para o produto: "),
-                                            input(
-                                                "Insira um valor para o produto: "),
-                                            input(
-                                                "Insira a quantidade do produto: "),
-                                            categorias[categoria_selecionada]))
+                    prod.set_nome(input("Favor inserir o nome do produto: ").lower())
+                    
+                    desc_valid = False
+                    while(desc_valid != True):
+                        descricao = input("Favor inserir a descricao do produto: ")
+                        if(len(descricao) >= 20):
+                            desc_valid = True
+                            prod.set_descricao(descricao)
+                        else:
+                            print("Favor inserir uma descricao com no minimo 20 caracteres")
 
+                    prod.set_peso(float(input("Insira o peso do produto: ")))
+
+                    prod.set_altura(float(input("Insira a altura do produto")))
+                     
+                    prod.set_preco(float(input("Insira o preco para o produto: "))) 
+
+                    prod.set_quantidade(int(input("Insira a quantidade do produto: ")))
+                    prod.set_categoria(categoria_insert)
+
+                    produtos.append(prod.__repr__())
+                    # for obj in produtos:
+                    #     print(obj.__repr__())
+                    
                 elif(input_usuario == 2):
-                    nome_produto = input(
-                        "Favor inserir o nome do produto a ser excluido: ")
-                    for produto in produtos:
-                        if produto.nome == nome_produto:
-                            produtos.remove(produto)
-
+                    if(len(produtos) > 0):
+                        count = 0
+                        for produto in produtos:
+                            print(str(count) + ' - ' + produto)
+                            count += 1
+                        
+                        opcao_escolhida = int(input("Favor informar o indice do produto"))
+                        produtos.remove(produtos[opcao_escolhida])
+                    else:
+                        print("A lista esta vazia")
                 elif(input_usuario == 3):
 
                     nome_produto_old = input(
@@ -183,8 +224,4 @@ if __name__ == "__main__":
 
                 elif(input_usuario == 4):
                     for produto in produtos:
-                        print("Nome: " + produto.nome +
-                              " Descricao: " + produto.descricao +
-                              " Preco: " + produto.preco +
-                              " Quantidade: " + produto.quantidade +
-                              " Categoria: " + produto.categoria)
+                        print(produto)
